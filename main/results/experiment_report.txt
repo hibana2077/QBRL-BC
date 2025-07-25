@@ -1,7 +1,7 @@
 QBRL-BC 乳癌診斷模型實驗報告
 ==================================================
 
-實驗時間：2025-07-25T13:01:48.980615
+實驗時間：2025-07-25T14:24:54.363821
 資料集：dataset/UCI_BCD.csv
 
 資料信息：
@@ -15,8 +15,8 @@ QBRL-BC 乳癌診斷模型實驗報告
   n_bins: 3
   tensor_method: one_hot
   cp_rank: 3
-  nmf_components: 10
-  nmf_alpha: 0.1
+  nmf_components: 13
+  nmf_alpha: 0.01
 
 規則數量：0
 規則特徵數量：0

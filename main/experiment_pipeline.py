@@ -47,12 +47,12 @@ class ExperimentPipeline:
             'binning_strategies': ['equal_width', 'equal_frequency', 'mdlp'],
             'n_bins_options': [3, 5, 7],
             'tensor_methods': ['one_hot', 'weighted'],
-            'cp_ranks': [3, 5, 7],
+            'cp_ranks': [3, 4],
             'max_cp_iter': 50,
             # NMF互動項設計參數
-            'nmf_components': [5, 10, 15],
+            'nmf_components': [12, 13],
             'use_nmf_fallback': True,  # 當CP分解效果不佳時使用NMF
-            'nmf_alpha': [0.1, 0.01, 0.001]
+            'nmf_alpha': [0.01]
         }
         
         # 結果存儲
@@ -136,8 +136,11 @@ class ExperimentPipeline:
         total_experiments = (len(self.config['binning_strategies']) * 
                            len(self.config['n_bins_options']) * 
                            len(self.config['tensor_methods']) * 
-                           len(self.config['cp_ranks']))
-        
+                           len(self.config['cp_ranks']) *
+                           len(self.config['nmf_components']) *
+                           len(self.config['nmf_alpha'])
+                           )
+
         print(f"總共需要執行 {total_experiments} 個CP分解實驗組合")
         print("如果CP分解效果不佳，將自動嘗試NMF + 互動項設計方法")
         
@@ -145,32 +148,35 @@ class ExperimentPipeline:
             for n_bins in self.config['n_bins_options']:
                 for tensor_method in self.config['tensor_methods']:
                     for cp_rank in self.config['cp_ranks']:
+                        for nmf_components in self.config['nmf_components']:
+                            for nmf_alpha in self.config['nmf_alpha']:
                         
-                        experiment_count += 1
-                        print(f"\n實驗 {experiment_count}/{total_experiments}: "
-                              f"{binning_strategy}, {n_bins}bins, {tensor_method}, rank={cp_rank}")
-                        
-                        try:
-                            # 執行單個實驗（包含CP和NMF方法）
-                            config = {
-                                'binning_strategy': binning_strategy,
-                                'n_bins': n_bins,
-                                'tensor_method': tensor_method,
-                                'cp_rank': cp_rank,
-                                'nmf_components': 10,  # 默認NMF分量數
-                                'nmf_alpha': 0.1      # 默認正則化係數
-                            }
-                            
-                            score = self._run_single_experiment(X, y, feature_names, config)
-                            
-                            if score > best_score:
-                                best_score = score
-                                best_config = config.copy()
-                                print(f"  新的最佳配置！分數: {best_score:.4f}")
-                            
-                        except Exception as e:
-                            print(f"  實驗失敗：{e}")
-                            continue
+                                experiment_count += 1
+                                print(f"\n實驗 {experiment_count}/{total_experiments}: "
+                                    f"{binning_strategy}, {n_bins}bins, {tensor_method}, rank={cp_rank}, "
+                                    f"nmf_components={nmf_components}, nmf_alpha={nmf_alpha}")
+
+                                try:
+                                    # 執行單個實驗（包含CP和NMF方法）
+                                    config = {
+                                        'binning_strategy': binning_strategy,
+                                        'n_bins': n_bins,
+                                        'tensor_method': tensor_method,
+                                        'cp_rank': cp_rank,
+                                        'nmf_components': nmf_components,
+                                        'nmf_alpha': nmf_alpha
+                                    }
+                                    
+                                    score = self._run_single_experiment(X, y, feature_names, config)
+                                    
+                                    if score > best_score:
+                                        best_score = score
+                                        best_config = config.copy()
+                                        print(f"  新的最佳配置！分數: {best_score:.4f}")
+                                    
+                                except Exception as e:
+                                    print(f"  實驗失敗：{e}")
+                                    continue
         
         # 如果最佳分數仍然不理想，專門嘗試NMF參數調優
         if best_score < 0.75:

@@ -34,11 +34,11 @@ class ModelTrainer:
             return None
         
         if model_type == 'logistic':
-            model = LogisticRegression(random_state=self.random_state, max_iter=1000)
+            model = LogisticRegression(random_state=self.random_state, max_iter=1000, n_jobs=-1)
         elif model_type == 'random_forest':
-            model = RandomForestClassifier(random_state=self.random_state, n_estimators=100)
+            model = RandomForestClassifier(random_state=self.random_state, n_estimators=100, n_jobs=-1)
         elif model_type == 'decision_tree':
-            model = DecisionTreeClassifier(random_state=self.random_state, max_depth=10)
+            model = DecisionTreeClassifier(random_state=self.random_state, max_depth=10, n_jobs=-1)
         else:
             raise ValueError(f"不支持的模型類型：{model_type}")
         
@@ -51,8 +51,8 @@ class ModelTrainer:
     def train_baseline_models(self, X, y):
         """訓練基準模型"""
         baseline_models = {
-            'logistic_regression': LogisticRegression(random_state=self.random_state, max_iter=1000),
-            'random_forest': RandomForestClassifier(random_state=self.random_state, n_estimators=100),
+            'logistic_regression': LogisticRegression(random_state=self.random_state, max_iter=1000, n_jobs=-1),
+            'random_forest': RandomForestClassifier(random_state=self.random_state, n_estimators=100, n_jobs=-1),
             'decision_tree': DecisionTreeClassifier(random_state=self.random_state, max_depth=10),
             'svm': SVC(random_state=self.random_state, probability=True),
             'knn': KNeighborsClassifier(n_neighbors=5)

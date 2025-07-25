@@ -43,8 +43,8 @@
     "n_bins": 3,
     "tensor_method": "one_hot",
     "cp_rank": 3,
-    "nmf_components": 10,
-    "nmf_alpha": 0.1
+    "nmf_components": 13,
+    "nmf_alpha": 0.01
   },
   "summary": {},
   "final_evaluation": {
@@ -54,8 +54,8 @@
       "n_bins": 3,
       "tensor_method": "one_hot",
       "cp_rank": 3,
-      "nmf_components": 10,
-      "nmf_alpha": 0.1
+      "nmf_components": 13,
+      "nmf_alpha": 0.01
     },
     "n_rules": 0,
     "n_rule_features": 0,
@@ -66,8 +66,8 @@
         "recall": 0.9764150943396226,
         "f1_score": 0.9833729216152018,
         "auc_roc": 0.9974367105332699,
-        "brier_score": 0.012797840150775043,
-        "log_loss": 0.05338468443139972,
+        "brier_score": 0.01279784015077505,
+        "log_loss": 0.053384684431399744,
         "balanced_accuracy": 0.985406426721632
       },
       "baseline_random_forest": {
@@ -121,5 +121,5 @@
   "decision_curve_analysis": {
     "baseline": "決策曲線分析報告 - Baseline Logistic Regression\n==================================================\n\n最佳決策閾值: 0.000\n最大淨效益: 0.3726\n\n臨床影響評估 (人群規模: 1000):\n  預測高風險人數: 1000\n  真陽性: 373\n  假陽性: 627\n  治療所需數量 (NNT): 2.7\n  陽性預測值: 0.373\n  陰性預測值: 0.000\n"
   },
-  "timestamp": "2025-07-25T13:01:48.980615"
+  "timestamp": "2025-07-25T14:24:54.363821"
 }
