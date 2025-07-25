@@ -377,6 +377,15 @@ class ExperimentPipeline:
         if filtered_features.shape[1] > 0:
             trainer.train_rule_based_model(filtered_features, y, 'logistic')
             trainer.train_rule_based_model(filtered_features, y, 'random_forest')
+        else:
+            # 如果沒有高品質規則，使用 CP 因子作為特徵
+            print("警告：沒有高品質規則，使用 CP 因子作為特徵訓練模型")
+            cp_factors = cp.transform(tensor)
+            if cp_factors is not None and cp_factors.shape[1] > 0:
+                trainer.train_rule_based_model(cp_factors, y, 'logistic')
+                trainer.train_rule_based_model(cp_factors, y, 'random_forest')
+                # 更新 filtered_features 為 CP 因子
+                filtered_features = cp_factors
         
         # 基準模型
         trainer.train_baseline_models(X, y)

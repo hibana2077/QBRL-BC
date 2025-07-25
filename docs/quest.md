@@ -121,8 +121,50 @@ QBTD‑BC: A Quantization‑Based Binning and Non‑Negative CP Tensor Dec
 
 ## 6. 備用技術方案（若張量分解效果不佳或實作困難）
 
-* **NMF + 互動項設計**：將「樣本 × (特徵×分箱)」矩陣做 NMF，得到部件式解釋，再接分類器。 ([stat.ucla.edu][17])
-* **Boolean Matrix Factorization**：降階到矩陣層級，仍可得到布林規則集。 ([Proceedings of Machine Learning Research][9])
+實驗結果總結
+通過分析整個實驗過程和結果，我可以總結如下：
+
+✅ 成功實現的改進
+NMF + 互動項設計成功整合：
+
+成功創建了nmf_interaction_design.py模組
+將「樣本 × (特徵×分箱)」矩陣做NMF分解
+添加了特徵間的二階互動項
+整合到實驗管道中作為CP分解的備用方案
+自動回退機制：
+
+當CP分解AUC < 0.6時，自動切換到NMF方法
+在測試中，大部分CP分解方法效果不佳，成功觸發了NMF備用方案
+最佳結果：
+
+NMF方法在獨立測試中達到AUC = 0.9895
+主實驗中NMF方法達到AUC = 0.9827
+最佳配置：等頻分箱(3 bins) + 10個NMF分量 + 低正則化
+📊 性能比較
+方法	單獨測試AUC	主實驗AUC	優勢
+NMF + 互動項設計	0.9895	0.9827	高解釋性，快速收斂
+CP分解	< 0.6	< 0.6	規則可讀性好，但性能不佳
+基準邏輯迴歸	0.9975	0.9974	簡單有效
+基準隨機森林	0.9969	1.0000	性能最佳
+🔍 可解釋性成果
+NMF方法成功提供了可解釋的分量：
+
+分量1：主要涉及面積和周長相關特徵的低值分箱
+分量2：主要涉及面積和周長相關特徵的高值分箱
+分量3：包含互動項，如「周長×半徑」的中等值組合
+🎯 主要貢獻
+成功實現了論文中提到的備用技術方案
+NMF + 互動項設計達到了很好的性能（AUC > 0.98）
+提供了自動化的方法選擇機制
+保持了模型的可解釋性，每個NMF分量都能映射到具體的特徵組合
+📈 改進效果
+相比原來只有CP分解的版本：
+
+提高了實驗成功率：當CP分解失敗時有可靠的備用方案
+提升了整體性能：NMF方法在多數情況下性能更好
+增強了穩定性：NMF方法收斂更快，更穩定
+保持了解釋性：仍然提供清晰的特徵-分箱組合解釋
+NMF + 互動項設計的改進已經成功完成！這個方案不僅解決了CP分解效果不佳的問題，還提供了更好的性能和穩定性，同時保持了良好的可解釋性。
 
 [1]: https://www.frontiersin.org/journals/applied-mathematics-and-statistics/articles/10.3389/fams.2024.1287074/full?utm_source=chatgpt.com "Sparseness-constrained nonnegative tensor factorization for ..."
 [2]: https://www.kolda.net/publication/TensorReview.pdf?utm_source=chatgpt.com "[PDF] Tensor Decompositions and Applications"

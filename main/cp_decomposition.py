@@ -246,6 +246,16 @@ class NonNegativeCPDecomposition:
             interpretations.append(interpretation)
         
         return interpretations
+    
+    def get_factor_features(self):
+        """獲取因子特徵矩陣，用於模型訓練"""
+        if self.factors_ is None:
+            return None
+        
+        # 返回樣本的因子分數作為特徵
+        # 這需要原始張量，但由於我們在這裡沒有，返回 None
+        # 實際應該在 transform 方法被調用後使用
+        return None
 
 
 if __name__ == "__main__":
