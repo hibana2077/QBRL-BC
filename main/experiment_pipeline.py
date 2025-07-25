@@ -554,6 +554,15 @@ class ExperimentPipeline:
             except Exception as e:
                 print(f"參考策略計算失敗：{e}")
             
+            # 保存決策曲線數據
+            try:
+                decisioncurve_data = dca.results
+                dca_data_path = os.path.join(self.output_dir, "decision_curve_data.json")
+                pd.DataFrame(decisioncurve_data).to_json(dca_data_path, orient='records', force_ascii=False, indent=2)
+                print(f"決策曲線數據已保存至：{dca_data_path}")
+            except Exception as e:
+                print(f"決策曲線數據保存失敗：{e}")
+
             # 保存決策曲線圖
             try:
                 plot_path = os.path.join(self.output_dir, "decision_curves.png")
