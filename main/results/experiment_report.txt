@@ -1,0 +1,40 @@
+QBRL-BC 乳癌診斷模型實驗報告
+==================================================
+
+實驗時間：2025-07-25T13:01:48.980615
+資料集：dataset/UCI_BCD.csv
+
+資料信息：
+  n_samples: 569
+  n_features: 30
+  n_positive: 212
+  n_negative: 357
+
+最佳配置：
+  binning_strategy: equal_frequency
+  n_bins: 3
+  tensor_method: one_hot
+  cp_rank: 3
+  nmf_components: 10
+  nmf_alpha: 0.1
+
+規則數量：0
+規則特徵數量：0
+
+決策曲線分析：
+
+baseline:
+決策曲線分析報告 - Baseline Logistic Regression
+==================================================
+
+最佳決策閾值: 0.000
+最大淨效益: 0.3726
+
+臨床影響評估 (人群規模: 1000):
+  預測高風險人數: 1000
+  真陽性: 373
+  假陽性: 627
+  治療所需數量 (NNT): 2.7
+  陽性預測值: 0.373
+  陰性預測值: 0.000
+
